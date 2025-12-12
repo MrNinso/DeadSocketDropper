@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  connection-monitor:
+    build: .
+    restart: unless-stopped
+    
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+
+    command: 
+      [
+        "-port=${PORT}",          # Source port to monitor
+        "-check-interval=${CHECK_INTEVAL}",   # Check interval in minutes
+        "-max-active=${MAX_ACTIVE}",      # Maximum allowed active duration in minutes (2 hours)
+        "-max-inactive=${MAX_INACTIVE}"      # Time unused before being removed from list (1 hour)
+      ]
