@@ -1,19 +1,34 @@
-version: '3.8'
+version: '3'
 
 services:
   connection-monitor:
     build: .
+    pull_policy: build
     restart: unless-stopped
     
     network_mode: host
     cap_add:
       - NET_ADMIN
       - SYS_ADMIN
+    
+    # --- RESOURCE LIMITS (Configured via ENV Vars) ---
+    deploy:
+      resources:
+        limits:
+          memory: ${MEMORY_LIMIT:-10m} 
+          cpus: '${CPU_LIMIT:-0.1}'
+    
+    # --- LOGGING LIMITS ---
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m" 
+        max-file: "3"   
 
     command: 
       [
-        "-port=${PORT}",          # Source port to monitor
-        "-check-interval=${CHECK_INTEVAL}",   # Check interval in minutes
-        "-max-active=${MAX_ACTIVE}",      # Maximum allowed active duration in minutes (2 hours)
-        "-max-inactive=${MAX_INACTIVE}"      # Time unused before being removed from list (1 hour)
+        "-port=${PORT}",
+        "-check-interval=${CHECK_INTEVAL}",
+        "-max-active=${MAX_ACTIVE}",
+        "-max-inactive=${MAX_INACTIVE}"
       ]
