@@ -181,9 +181,9 @@ func listCurrentConnections() ([]*ConnectionInfo, error) {
 
 		if len(fields) >= 5 {
 			// Extracting local and peer addresses from fields
-            // Assuming fields[4] is local address and fields[5] is peer address based on typical ss output
-			localAddr := fields[4] 
-			peerAddr := fields[5] 
+            // Assuming fields[3] is local address and fields[4] is peer address based on typical ss output
+			localAddr := fields[3] 
+			peerAddr := fields[4] 
 			connID := fmt.Sprintf("%s -> %s", localAddr, peerAddr)
 
 			currentConnections = append(currentConnections, &ConnectionInfo{
